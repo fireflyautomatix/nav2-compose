@@ -1,0 +1,16 @@
+services:
+  ros2:
+    image: nav2_sim
+    build:
+      context: ./
+      args:
+        - BASE_IMAGE=ros:humble
+    network_mode: host
+    ipc: host
+    volumes:
+      - /dev/:/dev/
+      - /tmp/:/tmp/
+    environment:
+      - RMW_IMPLEMENTATION=rmw_cyclonedds_cpp
+      - ROS_DOMAIN_ID
+      - CYCLONEDDS_URI=file:///etc/cyclonedds.xml

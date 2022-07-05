@@ -1,0 +1,24 @@
+services:
+  nav2:
+    extends:
+      file: base.yml
+      service: ros2
+    command: ros2 launch nav2_bringup tb3_simulation_launch.py use_rviz:=False
+    environment:
+      - TURTLEBOT3_MODEL=waffle
+      - GAZEBO_MODEL_PATH=$$GAZEBO_MODEL_PATH:/opt/ros/humble/share/turtlebot3_gazebo/models
+    depends_on:
+      - roudi
+  initialpose:
+    extends:
+      file: base.yml
+      service: ros2
+    command: 'ros2 topic pub -1 /initialpose geometry_msgs/msg/PoseWithCovarianceStamped "{ header: { frame_id: \"map\" }, pose: { pose: { position: { x: -2.0, y: -0.5, z: 0.01}}}}"'
+    depends_on:
+      - nav2
+      - roudi
+  roudi:
+    extends:
+      file: base.yml
+      service: ros2
+    command: iox-roudi
